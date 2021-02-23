@@ -3,46 +3,38 @@
 
 ---
 
-1️⃣ `Toggle nav-bar` 기능 구현
+1️⃣ `Toggle nav-bar` 함수 기능 구현
 
-toggle버튼에 event 기능 추가(click하면 "show_nav" 구현 / body를 클릭하면 closeNav 함수 실행)
-
-```js
-toggle.addEventListener("click", () => {
-    document.body.classList.toggle("show_nav");
-    document.body.addEventListener("click", closeNav); // body 아무데나 누르면 closeNav 실행
-});
-```
-```css
-.show_nav {
-    transform: translateX(200px);  /* 화면에서 보이게 하기 */
-}
-
-#navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 200px;
-    height: 100%;
-    color: #fff;
-    background-color: var(--main-color);
-    border-right: 2px solid rgba(117, 116, 116, 0.1);
-    z-index: 100;
-    transform: translateX(-100%); /* 화면에서 감추어 놓기 */
-}
-```
-
-2️⃣ nav-bar `close` 기능 구현
-
+closeNavbar 함수를 통해 if조건에 해당하면 navbar가 닫히고/열리도록 기능 구현
 
 ```js
-function closeNav(e) {
-    if (document.body.classList.contains("show_nav") && e.target !== toggle && !toggle.contains(e.target) && e.target !== navbar && !navbar.contains(e.target)) {
-        document.body.classList.toggle("show_nav");
-        document.body.removeEventListener("click", closeNav);
-    } else if (!document.body.classList.contains("show_nav")) {
-        document.body.removeEventListener("click", closeNav);
+function closeNavbar(e) {
+    // console.log("click:", e.target);  >>>  e.target 은 내가 클릭한 요소 하나
+    
+    if (document.body.classList.contains("show-nav") && e.target !== toggle && !toggle.contains(e.target) && e.target !== navbar && !navbar.contains(e.target)) {
+        // document.body.classList.contains("show-nav")  >>>  body안에 "show-nav"가 contains되어 있는 경우  >>>  toggle버튼이 show되어있는 경우
+        // e.target !== toggle  >>>  e.target(클릭한 요소)가 toggle 버튼이 아닌 경우
+        // !toggle.contains(e.target)  >>>  toggle버튼에 포함(contains)되어있는 e.target(toggle의 자식요소들)이 아닌 경우
+        // e.target !== navbar  >>>  e.target(클릭한 요소)가 navbar 영역이 아닌 경우
+        // !navbar.contains(e.target)  >>>   navbar 영역에 포함(contains)되어있는 e.target(navbar의 자식요소들)이 아닌 경우
+
+        // 위 모든 경우가 true일 때, 아래와 같은 로직이 구현된다
+        document.body.classList.toggle("show-nav"); // toggle버튼이 show되어있는 경우에 'toggle'되기 때문에 close를 의미
+        document.body.removeEventListener("click", closeNavbar); // body 아무곳이나 눌러도 event가 적용되지 않는다
+    } 
+    else if (!document.body.classList.contains("show-nav")) {    // close되어있을때
+        document.body.removeEventListener("click", closeNavbar); // body 아무곳이나 눌러도 event가 적용되지 않는다
     }
 }
+```
+
+2️⃣ nav-bar `toggle` 기능 구현
+
+toggle 버튼 누르면 navbar가 show 되고, close되는 기능 구현
+```js
+toggle.addEventListener("click", () => {
+    document.body.classList.toggle("show-nav");
+    document.body.addEventListener("click", closeNavbar);
+});
 ```
 
